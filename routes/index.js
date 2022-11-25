@@ -1,12 +1,9 @@
 const express           = require('express')
 const router            = express.Router();
 
-// const LoginRouter        = require('./api/login.js')
+const LogoutRouter      = require('./api/logout.js')
 
-// api
-
-// cth route login
-// router.use("/api/auth",         LoginRouter);
+router.use("/api/auth",         LogoutRouter);
 
 
 module.exports = router;
