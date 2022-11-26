@@ -13,10 +13,9 @@ module.exports = [
         return true;
     }),
     check('fullname').exists().withMessage("Fullname wajib diisi"),
-    check('name').exists().withMessage("Fullname wajib diisi"),
     check('password').exists().withMessage("Password wajib diisi"),
     check('password_confirmation').exists().withMessage("Password Confirmation wajib diisi"),
-    check("password").isLength({min: 8 }).withMessage("Password Wajib 8 karakter"),
+    check("password").isLength({min: 6 }).withMessage("Password Wajib 6 karakter"),
     check("password").custom( async (value,{req}) => {
         if (value != req.body.password_confirmation ) {
             throw new Error("Password dan Confirm Password tidak sama");
