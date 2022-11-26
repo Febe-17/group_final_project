@@ -18,6 +18,9 @@ module.exports = {
       deskripsi: {
         type: Sequelize.TEXT
       },
+      url: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: true,
         type: Sequelize.DATE

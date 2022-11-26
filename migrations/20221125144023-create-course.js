@@ -19,6 +19,9 @@ module.exports = {
       created_by: {
         type: Sequelize.STRING
       },
+      url: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

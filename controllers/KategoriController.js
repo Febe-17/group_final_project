@@ -7,89 +7,50 @@ const create = async(req,res)=> {
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+    
             return res.status(422).json({ 
                 status : false,
                 message : "Data yang diberikan tidak valid",
-                errors: errors.array() 
+                error: errors
             });
         } else {
-            const { title,description,label,assign,due_date} = req.body;
+            const { nama,gambar,deskripsi} = req.body;
+            const url = nama.split(" ").join("-");
+            await kategoriModel.create({
+                nama : nama,
+                gambar:gambar,
+                deskripsi: deskripsi,
+                url : url,
+            });
             
-            let getTaks = await Taks.create({
-                title : title,
-                description:description,
-                id_label: label,
-                due_date: due_date,
-                created_by : getUser.id,
-                status_task : 1
-            });
-            const id_taks = getTaks.id;
-            await Assigned.create({
-                id_user : assign,
-                id_task : id_taks
-            });
-            return res.status(200).json({
+            return res.status(201).json({
                 "status": true,
-                "messange": "Task berhasil ditambahkan",
+                "messange": "Kategori berhasil ditambahkan",
             });
         }
     } catch (error) {
         return res.status(409).json({
             "status": false,
-            "message": "Data gagal ditambahkan."
-        });
-    }
-}
-const getTaskById = async(req,res) => {
-    try {
-        const task = await Taks.findOne({
-            where : {
-                id : req.params.id
-            },include: [
-                {
-                    model: Labels,
-                    attributes:['name','color']
-                },
-                {
-                    model: Assigned,
-                    attributes:['id_user'],
-                    include: [
-                        {
-                            model : Users,
-                            attributes:['fullname'],
-                        }
-                    ]
-                }
-            ]
-        })
-        res.json({
-           task
-        });
-    } catch (error) {
-        res.status(409).json({
-            status : true,
-            message : "Data gagal ditemukan"
+            "message": "Data gagal ditambahkan.",
+            "error" : error
         });
     }
 }
 const deleteByid = async (req,res) => {
     try{
-        const { id_taks } = req.body;
-        await Assigned.destroy({
-            where: {
-                id_task : id_taks
-            }
-        })
-        await Taks.destroy({
-            where: {
-                id : id_taks
-            }
-        })
+        const { id } = req.params;
 
+        checkKategori();
+        await kategoriModel.destroy({
+            where: {
+                id : id
+            }
+        })
         res.status(200).json({
             status : true,
-            message : "Task berhasil Diubah"
+            message : "Kategori berhasil Dihapus"
         });
+
     } catch (error) {
         res.status(409).json({
             status : true,
@@ -97,88 +58,73 @@ const deleteByid = async (req,res) => {
         });
     }
 }
-const UpdateById = async(req,res) => {
+const updateById = async(req,res) => {
     try {
-        const { title,description,label,assign,due_date,status} = req.body;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ 
+                status : false,
+                message : "Data yang diberikan tidak valid",
+                errors: errors.array() 
+            });
+        } else {
+            const {id} = req.params;
+            const { nama,gambar,deskripsi } = req.body;
+            checkKategori();
+            const data = {
+                nama : nama,
+                gambar : gambar,
+                deskripsi : deskripsi,
+                updateAt : Date.now()
+            }
+            await kategoriModel.update(data, {
+                where: {
+                  id: id_user
+                }
+            });
+            res.status(201).json({
+                "status" : true,
+                "messange" : "Data berhasil di update"
+            });
+        }
 
     } catch (error) {
         console.log(error);
     }
 }
-const getDataTask = async(req,res) => {
+const getAll = async(req,res) => {
     try {
-        const taskOne = await Taks.findAll({
-            where : {status_task : 1},
-            include: [
-                {
-                    model: Labels,
-                    attributes:['name','color']
-                },
-                {
-                    model: Assigned,
-                    attributes:['id_user'],
-                    include: [
-                        {
-                            model : Users,
-                            attributes:['fullname'],
-                        }
-                    ]
-                }
-            ]
-        });
-        const taskTwo = await Taks.findAll({
-            where : {status_task : 2},
-            include: [
-                {
-                    model: Labels,
-                    attributes:['name','color']
-                },
-                {
-                    model: Assigned,
-                    attributes:['id_user'],
-                    include: [
-                        {
-                            model : Users,
-                            attributes:['fullname'],
-                        }
-                    ]
-                }
-            ]
-        });
-        const taskThree = await Taks.findAll({
-            where : {status_task : 3},
-            include: [
-                {
-                    model: Labels,
-                    attributes:['name','color']
-                },
-                {
-                    model: Assigned,
-                    attributes:['id_user'],
-                    include: [
-                        {
-                            model : Users,
-                            attributes:['fullname'],
-                        }
-                    ]
-                }
-            ]
-        });
-        res.json({
-            dataTaskOne     : taskOne,          
-            dataTaskTwo     : taskTwo,
-            dataTaskThree   : taskThree
+        const getAll =  await kategoriModel.findAll({
+            attributes: ['nama','gambar','url']
+          })
+        return res.status(200).json({
+            "status" : true,
+            "data" : getAll
         })
     } catch (error) {
-        res.json({ 
-            message : "data gagal ditemukan"
+        res.status(409).json({
+            status : true,
+            message : "Data gagal didapatkan"
+        });
+    }
+}
+async function checkKategori(id){
+    const check = await kategoriModel.findOne({
+        where : {
+            id
+        }
+    });
+    if(!check){
+        return res.status(400).json({
+            "status" : false,
+            "message" : `kategori with id ${id} not found`
         })
     }
 }
+
 module.exports = {
     create,
-    getTaskById,
+    getAll,
     deleteByid,
-    getDataTask
-    // UpdateById
+    updateById
 }
