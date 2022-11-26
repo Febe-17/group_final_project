@@ -2,37 +2,34 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('kategori', {
+    await queryInterface.createTable('course', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      id_sub_kategori: {
+        type: Sequelize.INTEGER,
+        references: { model: 'sub_kategori', key: 'id' }
+      },
       nama: {
         type: Sequelize.STRING
       },
-      gambar: {
+      created_by: {
         type: Sequelize.STRING
       },
-      deskripsi: {
-        type: Sequelize.TEXT
-      },
       createdAt: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: true,
-        type: Sequelize.DATE
-      },
-      deleteAt:{
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('kategori');
+    await queryInterface.dropTable('course');
   }
 };

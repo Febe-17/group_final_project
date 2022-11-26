@@ -12,7 +12,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-     await queryInterface.bulkInsert(
+     const kategori = await queryInterface.bulkInsert(
       'kategori',
        [
         {
@@ -47,6 +47,7 @@ module.exports = {
         },
 
       ], {});
+     
   },
 
   async down (queryInterface, Sequelize) {
