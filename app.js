@@ -1,6 +1,7 @@
 // npm 
 const express         = require('express')
 const dotenv          = require('dotenv')
+const cors            = require('cors')
 // local
 const allRoutes       = require('./routes');
 const {sequelize}     = require('./models')
@@ -8,7 +9,7 @@ const {sequelize}     = require('./models')
 dotenv.config();
 const app             = express()
 const port            = process.env.PORT;
-
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({
   extended: false

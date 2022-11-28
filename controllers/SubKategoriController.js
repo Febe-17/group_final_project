@@ -1,9 +1,7 @@
 
 
-const kategoriModel         = require("../models").kategori;
+const SubKategoriModel         = require("../models").sub_kategori;
 const {validationResult}    = require('express-validator');
-const sub_kategori          = require("../models").sub_kategori;
-const course                = require("../models").course;
 
 const create = async(req,res)=> {
     try{
@@ -15,10 +13,11 @@ const create = async(req,res)=> {
                 error: errors
             });
         } else {
-            const { nama,gambar,deskripsi} = req.body;
+            const { id_kategori, nama,gambar,deskripsi} = req.body;
             const url = nama.split(" ").length > 1 ? nama.split(" ").join("-") : nama;
 
-            await kategoriModel.create({
+            await SubKategoriModel.create({
+                id_kategori : id_kategori,
                 nama : nama,
                 gambar:gambar,
                 deskripsi: deskripsi,
@@ -42,7 +41,7 @@ const deleteByid = async (req,res) => {
     try{
         const { id } = req.params;
 
-        const check = await kategoriModel.findOne({
+        const check = await SubKategoriModel.findOne({
             where : {
                 id : id
             }
@@ -53,7 +52,7 @@ const deleteByid = async (req,res) => {
                 "message" : `kategori not found`
             })
         }
-        const test = await kategoriModel.destroy({
+        const test = await SubKategoriModel.destroy({
             where: {
                 id : id
             }
@@ -61,7 +60,7 @@ const deleteByid = async (req,res) => {
         console.log(test)
         res.status(200).json({
             status : true,
-            message : "Kategori berhasil Dihapus"
+            message : "SubKategori berhasil Dihapus"
         });
 
     } catch (error) {
@@ -83,7 +82,7 @@ const updateById = async(req,res) => {
             });
         } else {
             const {id} = req.params;
-            const check = await kategoriModel.findOne({
+            const check = await SubKategoriModel.findOne({
                 where : {
                     id : id
                 }
@@ -94,8 +93,9 @@ const updateById = async(req,res) => {
                     "message" : `kategori not found`
                 })
             }
-            const { nama,gambar,deskripsi } = req.body;
+            const {id_kategori, nama,gambar,deskripsi } = req.body;
             const data = {
+                id_kategori : id_kategori,
                 nama : nama,
                 gambar : gambar,
                 deskripsi : deskripsi,
@@ -116,26 +116,10 @@ const updateById = async(req,res) => {
         console.log(error);
     }
 }
-const getAll = async(req,res) => {
-    try {
-        const getAll =  await kategoriModel.findAll({
-            attributes: ['nama','gambar','url']
-          })
-        return res.status(200).json({
-            "status" : true,
-            "data" : getAll
-        })
-    } catch (error) {
-        res.status(409).json({
-            status : true,
-            message : "Data gagal didapatkan"
-        });
-    }
-}
-const findKategori = async(req,res) => {
+const findSubKategori = async(req,res) => {
     try {
         const {url} = req.params;
-        const kategori = await kategoriModel.findOne({
+        const subkategori = await SubKategoriModel.findOne({
             where : {
                 url : url
             },
@@ -149,17 +133,16 @@ const findKategori = async(req,res) => {
                     include: [ 
                         {
                             model: course,
-                          
                             attributes:['nama','created_by','url'],
                         }
                     ]
                 },
             ]
         })
-        res.status(200).json({
-           status : true,
-           data : kategori
-        });
+        return res.status(200).json({
+            "status" : true,
+            "data" : getAll
+        })
     } catch (error) {
         res.status(409).json({
             status : true,
@@ -170,8 +153,7 @@ const findKategori = async(req,res) => {
 
 module.exports = {
     create,
-    getAll,
     deleteByid,
     updateById,
-    findKategori
+    findSubKategori
 }

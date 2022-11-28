@@ -9,12 +9,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      id_kategori: {
+        type: Sequelize.INTEGER,
+        references: { model: 'kategori', key: 'id' }
+      },
       id_sub_kategori: {
         type: Sequelize.INTEGER,
         references: { model: 'sub_kategori', key: 'id' }
       },
       nama: {
         type: Sequelize.STRING
+      },
+      thumbnail: {
+        type: Sequelize.TEXT
       },
       created_by: {
         type: Sequelize.STRING
@@ -23,11 +30,15 @@ module.exports = {
         type: Sequelize.STRING
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
+        type: Sequelize.DATE
+      },
+      deletedAt:{
+        allowNull: true,
         type: Sequelize.DATE
       }
     });

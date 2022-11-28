@@ -11,15 +11,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      course.hasMany(models.course_section,{
+        foreignKey: 'id_course'
+      })
     }
   }
   course.init({
     id_sub_kategori: DataTypes.INTEGER,
     nama: DataTypes.STRING,
-    created_by: DataTypes.STRING
+    created_by: DataTypes.STRING,
+    url: DataTypes.TEXT,
+    deletedAt  : DataTypes.DATE
   }, {
     sequelize,
     modelName: 'course',
+    tableName : 'course',
+    paranoid: true,
   });
   return course;
 };
