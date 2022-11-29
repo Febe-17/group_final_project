@@ -8,7 +8,6 @@ module.exports = {
         try {
 
             const errors = validationResult(req);
-            console.log(errors);
 
         if (!errors.isEmpty()) {
             return res.status(422).json({
@@ -17,6 +16,7 @@ module.exports = {
                 errors: errors.array()
               });  
         } else {
+            console.log(req.body);
             const salt = await bcrypt.genSalt(10);
 
             const hashPassword = await bcrypt.hash(req.body.password, salt);
@@ -24,8 +24,10 @@ module.exports = {
             const newUser = await users.create({
                 fullname: req.body.fullname,
                 email: req.body.email,
-                password: hashPassword
+                password: hashPassword,
+                role : "user"
             });
+            console.log(newUser);
             res.status(201).send({
                 status: true,
                 message: "registrasi berhasil",

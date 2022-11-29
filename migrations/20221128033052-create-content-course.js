@@ -2,41 +2,23 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('content_course', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      fullname: {
-        type: Sequelize.STRING
+      id_course_section: {
+        type: Sequelize.INTEGER,
+        references: { model: 'course_section', key: 'id' }
       },
-      email: {
-        type: Sequelize.STRING
-      },
-      password: {
-        type: Sequelize.STRING
-      },
-      tgl_lahir: {
-        type: Sequelize.STRING
-      },
-      alamat: {
+      link: {
         type: Sequelize.TEXT
       },
-      bio: {
-        type: Sequelize.TEXT
-      },
-      jenis_kelamin: {
+      type: {
         type: Sequelize.ENUM,
-        values: ['perempuan', 'laki-laki']
-      },
-      image: {
-        type: Sequelize.STRING
-      },
-      role: {
-        type: Sequelize.ENUM,
-        values: ['admin', 'user']
+        values: ['video', 'image']
       },
       createdAt: {
         allowNull: true,
@@ -53,6 +35,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('content_course');
   }
 };
