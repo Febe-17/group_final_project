@@ -96,7 +96,42 @@ const findCourse =  async (req,res) => {
         });
     }
 }
+const deleteByid = async (req,res) => {
+    try{
+        const { id } = req.params;
 
+        const check = await courseModel.findOne({
+            where : {
+                id : id
+            }
+        });
+        if(!check){
+            return res.status(400).json({
+                "status" : false,
+                "message" : `kategori not found`
+            })
+        }
+        const test = await courseModel.destroy({
+            where: {
+                id : id
+            }
+        }).then((resp) => {
+            
+        })
+        console.log(test)
+        res.status(200).json({
+            status : true,
+            message : "Kategori berhasil Dihapus"
+        });
+
+    } catch (error) {
+        res.status(409).json({
+            status : true,
+            message : "Data gagal Diubah",
+            error : error
+        });
+    }
+}
 
 module.exports = {
     create,
