@@ -51,7 +51,7 @@ module.exports = {
           fullname: req.body.fullname,
           tgl_lahir: req.body.tgl_lahir,
           alamat: req.body.alamat,
-          updateAt: Date.now()
+          updatedAt: Date.now()
         }
         await users.update(updateUser, {
           where: {
