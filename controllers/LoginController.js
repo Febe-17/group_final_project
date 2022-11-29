@@ -25,15 +25,21 @@ const login = async (req, res) => {
         } 
 
         const user_id = User.id;
-        const nama = User.nama;
+        const nama = User.fullname;
         const email = User.email;
-        const accessToken = jwt.sign({user_id,nama,email}, process.env.ACCESS_TOKEN_SECRET,{
+        const role  =  User.role;
+        const accessToken = jwt.sign({user_id,nama,email,role}, process.env.ACCESS_TOKEN_SECRET,{
             expiresIn : '1d'
         });
         
         return res.status(200).json({
             "status": true,
-            "access_token": accessToken
+            "access_token": accessToken,
+            'user' : {
+                'id'        : User.id,
+                'fullname'  : User.fullname,
+                'email'     : User.email,
+            }
         });
     } catch (error) {
         return res.status(409).json({

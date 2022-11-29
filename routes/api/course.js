@@ -5,9 +5,8 @@ const {create,findCourse}           = require("../../controllers/CourseControlle
 
 // router.use(verifyToken);
 
-// router.get("/all-kategori",    getAll);
-router.post("/course",           create);
-router.get("/course/:url",        findCourse)
+router.post("/course",              create);
+router.get("/course/:url",          findCourse)
 // router.put("/kategori/:id",        checkKategori ,updateById);
 // router.delete("/kategori/:id",     deleteByid);
 // router.get("/all-kategori/:url",    findKategori);
