@@ -103,22 +103,34 @@ const deleteByid = async (req,res) => {
         const check = await courseModel.findOne({
             where : {
                 id : id
-            }
-        });
-        if(!check){
-            return res.status(400).json({
-                "status" : false,
-                "message" : `kategori not found`
-            })
-        }
-        const test = await courseModel.destroy({
-            where: {
-                id : id
-            }
-        }).then((resp) => {
+            },
+            include: [
+                {
+                    model: courseSectionModel,
+                },
+            ]
+        }).then((data) => {
+            contentCourseModel.destroy({
+                where : {
+                    id_course_section : data.course_sections.map(function(d){ return d.id})
+                }
+            }).then(
+                courseSectionModel.destroy({ 
+                    where : { 
+                        id_course : data.id 
+                    }
+                }).then(
+                    courseModel.destroy({
+                        where: {
+                                id : data.id
+                            }
+                        }
+                    )
+                )
+            ) 
             
-        })
-        console.log(test)
+        });
+      
         res.status(200).json({
             status : true,
             message : "Kategori berhasil Dihapus"
@@ -126,7 +138,7 @@ const deleteByid = async (req,res) => {
 
     } catch (error) {
         res.status(409).json({
-            status : true,
+            status : false,
             message : "Data gagal Diubah",
             error : error
         });
@@ -135,5 +147,6 @@ const deleteByid = async (req,res) => {
 
 module.exports = {
     create,
-    findCourse
+    findCourse,
+    deleteByid
 }

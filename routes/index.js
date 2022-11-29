@@ -7,9 +7,7 @@ const KategoriRouter        = require("./api/kategori.js");
 const SubKategoriRouter     = require("./api/sub_kategori.js");
 const CourseRouter          = require("./api/course.js");
 
-router.use("/" , (req,res) => {
-    res.send("API FEBE 17")
-})
+
 router.use("/api/auth",         registerRouter);
 router.use("/api/auth",         LoginRouter);
 router.use("/api/auth",         LogoutRouter);
