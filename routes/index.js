@@ -6,7 +6,7 @@ const registerRouter        = require('./api/register')
 const KategoriRouter        = require("./api/kategori.js");
 const SubKategoriRouter     = require("./api/sub_kategori.js");
 const CourseRouter          = require("./api/course.js");
-
+const userRouter = require('./api/user')
 
 router.use("/api/auth",         registerRouter);
 router.use("/api/auth",         LoginRouter);
@@ -17,10 +17,6 @@ router.use("/api",              KategoriRouter);
 router.use("/api",              SubKategoriRouter);
 router.use("/api",              CourseRouter);
 
-
-
-
-
-
+router.use("/api/user",         userRouter);
 
 module.exports = router;
