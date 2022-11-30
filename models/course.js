@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       course.hasMany(models.course_section,{
         foreignKey: 'id_course'
       })
+      course.hasOne(models.kategori,{
+        foreignKey: 'id'
+      })
     }
   }
   course.init({

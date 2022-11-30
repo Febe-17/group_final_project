@@ -1,8 +1,30 @@
 
 
-const SubKategoriModel         = require("../models").sub_kategori;
+const SubKategoriModel      = require("../models").sub_kategori;
+const CourseModel           = require("../models").course;
 const {validationResult}    = require('express-validator');
+const kategoriModel         = require("../models").kategori;
 
+
+const getAll = async(req,res) => {
+    try {
+        const {url} = req.params;
+        const getAll = await SubKategoriModel.findAll({
+            attributes: {
+                exclude: ['createdAt', 'updatedAt','deletedAt','id','id_kategori']
+            },
+        });
+        return res.status(200).json({
+            "status" : true,
+            "data" : getAll
+        })
+    } catch (error) {
+        res.status(409).json({
+            status : true,
+            message : "Data gagal didapatkan"
+        });
+    }
+}
 const create = async(req,res)=> {
     try{
         const errors = validationResult(req);
@@ -26,7 +48,7 @@ const create = async(req,res)=> {
 
             return res.status(201).json({
                 "status": true,
-                "messange": "Kategori berhasil ditambahkan",
+                "messange": "Sub Kategori berhasil ditambahkan",
             });
         }
     } catch (error) {
@@ -127,13 +149,14 @@ const findSubKategori = async(req,res) => {
                 exclude: ['createdAt', 'updatedAt','deletedAt','id']
             },
             include: [
+
                 {
-                    model: sub_kategori,
-                    attributes:['nama','gambar','url'],
-                    include: [ 
+                    model: CourseModel,
+                    attributes:['nama','created_by','thumbnail','url',],
+                    include: [
                         {
-                            model: course,
-                            attributes:['nama','created_by','url'],
+                            model: kategoriModel,
+                            attributes:[['nama','label']]
                         }
                     ]
                 },
@@ -141,7 +164,7 @@ const findSubKategori = async(req,res) => {
         })
         return res.status(200).json({
             "status" : true,
-            "data" : getAll
+            "data" : subkategori
         })
     } catch (error) {
         res.status(409).json({
@@ -152,6 +175,7 @@ const findSubKategori = async(req,res) => {
 }
 
 module.exports = {
+    getAll,
     create,
     deleteByid,
     updateById,
