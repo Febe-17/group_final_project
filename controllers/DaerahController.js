@@ -1,17 +1,15 @@
 
 
-const SubKategoriModel      = require("../models").sub_kategori;
-const CourseModel           = require("../models").course;
+const DaerahModel           = require("../models").daerah;
 const {validationResult}    = require('express-validator');
-const kategoriModel         = require("../models").kategori;
+
 
 
 const getAll = async(req,res) => {
     try {
-        const {url} = req.params;
-        const getAll = await SubKategoriModel.findAll({
+        const getAll = await DaerahModel.findAll({
             attributes: {
-                exclude: ['createdAt', 'updatedAt','deletedAt','id','id_kategori']
+                exclude: ['createdAt', 'updatedAt','deletedAt','id']
             },
         });
         return res.status(200).json({
@@ -35,20 +33,20 @@ const create = async(req,res)=> {
                 error: errors
             });
         } else {
-            const { id_kategori, nama,gambar,deskripsi} = req.body;
+            const { nama,thumbnail,deskripsi,image} = req.body;
             const url = nama.split(" ").length > 1 ? nama.split(" ").join("-") : nama;
 
-            await SubKategoriModel.create({
-                id_kategori : id_kategori,
+            await DaerahModel.create({
                 nama : nama,
-                gambar:gambar,
+                thumbnail:thumbnail,
                 deskripsi: deskripsi,
+                image : image,
                 url : url,
             });
 
             return res.status(201).json({
                 "status": true,
-                "messange": "Sub Kategori berhasil ditambahkan",
+                "messange": "Daerah berhasil ditambahkan",
             });
         }
     } catch (error) {
@@ -63,7 +61,7 @@ const deleteByid = async (req,res) => {
     try{
         const { id } = req.params;
 
-        const check = await SubKategoriModel.findOne({
+        const check = await DaerahModel.findOne({
             where : {
                 id : id
             }
@@ -71,10 +69,10 @@ const deleteByid = async (req,res) => {
         if(!check){
             return res.status(400).json({
                 "status" : false,
-                "message" : `kategori not found`
+                "message" : `Daerah not found`
             })
         }
-        const test = await SubKategoriModel.destroy({
+        const test = await DaerahModel.destroy({
             where: {
                 id : id
             }
@@ -82,7 +80,7 @@ const deleteByid = async (req,res) => {
         console.log(test)
         res.status(200).json({
             status : true,
-            message : "SubKategori berhasil Dihapus"
+            message : "Daerah berhasil Dihapus"
         });
 
     } catch (error) {
@@ -104,7 +102,7 @@ const updateById = async(req,res) => {
             });
         } else {
             const {id} = req.params;
-            const check = await SubKategoriModel.findOne({
+            const check = await DaerahModel.findOne({
                 where : {
                     id : id
                 }
@@ -112,18 +110,18 @@ const updateById = async(req,res) => {
             if(!check){
                 return res.status(400).json({
                     "status" : false,
-                    "message" : `kategori not found`
+                    "message" : `Daerah not found`
                 })
             }
-            const {id_kategori, nama,gambar,deskripsi } = req.body;
+            const { nama,thumbnail,deskripsi,image} = req.body;
             const data = {
-                id_kategori : id_kategori,
                 nama : nama,
-                gambar : gambar,
+                thumbnail : thumbnail,
+                image : image,
                 deskripsi : deskripsi,
                 updatedAt : Date.now()
             }
-            await kategoriModel.update(data, {
+            await DaerahModel.update(data, {
                 where: {
                   id: id
                 }
@@ -135,36 +133,27 @@ const updateById = async(req,res) => {
         }
 
     } catch (error) {
-        console.log(error);
+        res.status(409).json({
+            status : true,
+            message : "Data gagal Diubah",
+            error : error
+        });
     }
 }
-const findSubKategori = async(req,res) => {
+const findDaerah = async(req,res) => {
     try {
         const {url} = req.params;
-        const subkategori = await SubKategoriModel.findOne({
+        const daerah = await DaerahModel.findOne({
             where : {
                 url : url
             },
             attributes: {
                 exclude: ['createdAt', 'updatedAt','deletedAt','id']
             },
-            include: [
-
-                {
-                    model: CourseModel,
-                    attributes:['nama','created_by','thumbnail','url',],
-                    include: [
-                        {
-                            model: kategoriModel,
-                            attributes:[['nama','label']]
-                        }
-                    ]
-                },
-            ]
         })
         return res.status(200).json({
             "status" : true,
-            "data" : subkategori
+            "data" : daerah
         })
     } catch (error) {
         res.status(409).json({
@@ -179,5 +168,5 @@ module.exports = {
     create,
     deleteByid,
     updateById,
-    findSubKategori
+    findDaerah
 }

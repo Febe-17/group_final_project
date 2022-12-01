@@ -12,7 +12,7 @@ const create = async(req,res)=> {
             return res.status(422).json({ 
                 status : false,
                 message : "Data yang diberikan tidak valid",
-                error: errors
+                error: errors.array()
             });
         } else {
             const { nama,gambar,deskripsi} = req.body;
@@ -67,7 +67,7 @@ const deleteByid = async (req,res) => {
     } catch (error) {
         res.status(409).json({
             status : true,
-            message : "Data gagal Diubah",
+            message : "Data gagal Dihapus",
             error : error
         });
     }
@@ -106,14 +106,18 @@ const updateById = async(req,res) => {
                   id: id
                 }
             });
-            res.status(201).json({
+            res.status(200).json({
                 "status" : true,
                 "messange" : "Data berhasil di update"
             });
         }
 
     } catch (error) {
-        console.log(error);
+        return res.status(409).json({
+            "status": false,
+            "message": "Data gagal Diupdate.",
+            "error" : error
+        });
     }
 }
 const getAll = async(req,res) => {
@@ -149,8 +153,7 @@ const findKategori = async(req,res) => {
                     include: [ 
                         {
                             model: course,
-                          
-                            attributes:['nama','created_by','url'],
+                            attributes:['nama','created_by','thumbnail','url',],
                         }
                     ]
                 },
