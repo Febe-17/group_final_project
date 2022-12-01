@@ -14,10 +14,15 @@ module.exports = (sequelize, DataTypes) => {
       course.hasMany(models.course_section,{
         foreignKey: 'id_course'
       })
+      course.hasOne(models.kategori,{
+        foreignKey: 'id'
+      })
     }
   }
   course.init({
     id_sub_kategori: DataTypes.INTEGER,
+    id_kategori : DataTypes.INTEGER,
+    thumbnail :  DataTypes.TEXT,
     nama: DataTypes.STRING,
     created_by: DataTypes.STRING,
     url: DataTypes.TEXT,
