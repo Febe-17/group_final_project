@@ -18,14 +18,14 @@ module.exports = [
     check('thumbnail').exists().withMessage("Thumbnail wajib diisi"),
     body('id_kategori').custom( async (value) => {
         const CheckName = await kategoriModel.findOne({where : {id : value}});
-        if (CheckName) {
+        if (!CheckName) {
             throw new Error("id Kategori Tidak ditemukan");
         }
         return true;
     }),
     body('id_sub_kategori').custom( async (value) => {
         const CheckName = await SubKategoriModel.findOne({where : {id : value}});
-        if (CheckName) {
+        if (!CheckName) {
             throw new Error("id Sub Kategori Tidak ditemukan");
         }
         return true;
