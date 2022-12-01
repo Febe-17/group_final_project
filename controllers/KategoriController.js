@@ -123,7 +123,7 @@ const updateById = async(req,res) => {
 const getAll = async(req,res) => {
     try {
         const getAll =  await kategoriModel.findAll({
-            attributes: ['nama','gambar','url']
+            attributes: ['id','nama','gambar','url']
           })
         return res.status(200).json({
             "status" : true,

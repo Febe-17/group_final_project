@@ -11,7 +11,8 @@ const getAll = async(req,res) => {
         const {url} = req.params;
         const getAll = await SubKategoriModel.findAll({
             attributes: {
-                exclude: ['createdAt', 'updatedAt','deletedAt','id','id_kategori']
+                exclude: ['createdAt', 'updatedAt','deletedAt']
+
             },
         });
         return res.status(200).json({
