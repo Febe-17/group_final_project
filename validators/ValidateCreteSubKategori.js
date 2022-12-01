@@ -17,13 +17,6 @@ module.exports = [
         }
         return true;
     }),
-    body('nama').custom( async (value) => {
-        const CheckName = await SubKategoriModel.findOne({where : {nama : value}});
-        if (CheckName) {
-            throw new Error("Nama Kategori Telah digunakan");
-        }
-        return true;
-    }),
     
    
 ]

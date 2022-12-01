@@ -16,13 +16,6 @@ module.exports = [
     check('type').exists().withMessage("Type wajib diisi"),
     check('link').exists().withMessage("Link wajib diisi"),
     check('thumbnail').exists().withMessage("Thumbnail wajib diisi"),
-    body('nama').custom( async (value) => {
-        const CheckName = await courseModel.findOne({where : {nama : value}});
-        if (CheckName) {
-            throw new Error("Nama Kategori Telah digunakan");
-        }
-        return true;
-    }),
     body('id_kategori').custom( async (value) => {
         const CheckName = await kategoriModel.findOne({where : {id : value}});
         if (CheckName) {
