@@ -6,7 +6,6 @@ const {getAll,create,findSubKategori,deleteByid,updateById}          = require("
 const checkCreateSubKategori  = require("../../validators/ValidateCreteSubKategori")
 const checkUpdateSubKategori  = require("../../validators/ValidateUpdateSubKategori")
 
-
 router.get("/sub-kategori/",            verifyToken, authPage(['admin']), getAll);
 router.get("/sub-kategori/:url",        verifyToken, findSubKategori);
 router.post("/sub-kategori",            verifyToken, authPage(['admin']),checkCreateSubKategori, create);
