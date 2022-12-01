@@ -33,13 +33,13 @@ const create = async(req,res)=> {
                 error: errors
             });
         } else {
-            const { nama,thumbnail,deskripsi,image} = req.body;
+            const { nama,thumbnail,descripsi,image} = req.body;
             const url = nama.split(" ").length > 1 ? nama.split(" ").join("-") : nama;
 
             await DaerahModel.create({
                 nama : nama,
                 thumbnail:thumbnail,
-                deskripsi: deskripsi,
+                descripsi: descripsi,
                 image : image,
                 url : url,
             });
@@ -113,12 +113,12 @@ const updateById = async(req,res) => {
                     "message" : `Daerah not found`
                 })
             }
-            const { nama,thumbnail,deskripsi,image} = req.body;
+            const { nama,thumbnail,descripsi,image} = req.body;
             const data = {
                 nama : nama,
                 thumbnail : thumbnail,
                 image : image,
-                deskripsi : deskripsi,
+                descripsi : descripsi,
                 updatedAt : Date.now()
             }
             await DaerahModel.update(data, {
