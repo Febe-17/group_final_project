@@ -12,7 +12,7 @@ const port            = process.env.PORT;
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({
-  extended: false
+  extended: true
 }));
 
 //  get all endpoint 
